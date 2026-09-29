@@ -2,7 +2,11 @@
 
 Standalone Gowin FPGA SPI flash bridge for the Papilio Retrocade.
 
-This repository contains the direct passthrough bridge used by the Papilio ESP32 loader to access the FPGA's external SPI flash. It is intentionally independent of the older `papilio_tang_bootloader` project and does not include LED, timer, or application logic.
+This repository contains the direct passthrough bridge used by the Papilio ESP32 loader to access the FPGA's external SPI flash. It is intentionally independent of the older `papilio_tang_bootloader` project.
+
+The `experiment/purple-rgb-blink` branch additionally drives the Retrocade
+WS2812B RGB LED purple and blinks it once per second while the bridge is in
+FPGA SRAM.
 
 ## Signal mapping
 
@@ -14,6 +18,14 @@ ESP32-S3 to FPGA user I/O:
 | GPIO2 | L12 | SPI MOSI |
 | GPIO3 | J11 | SPI chip select |
 | GPIO4 | F10 | SPI MISO |
+
+Experimental branch clock and LED signals:
+
+| Signal | FPGA pin | Purpose |
+| --- | :---: | --- |
+| `clk_27mhz` | H11 | 27 MHz clock for the LED blink and WS2812B driver |
+| `rst_n` | C7 | Active-low LED driver reset |
+| `rgb_led` | P9 | WS2812B data output |
 
 FPGA bridge to the onboard SPI flash:
 
@@ -37,7 +49,9 @@ assign spiflash_cs_n = esp_cs_n;
 assign esp_miso = spiflash_miso;
 ```
 
-The bridge has no clocked logic and does not interpret SPI commands.
+The base bridge is a combinational SPI passthrough and does not interpret SPI
+commands. The experimental LED branch adds a clocked WS2812B driver without
+changing the SPI signal path.
 
 ## Build
 
