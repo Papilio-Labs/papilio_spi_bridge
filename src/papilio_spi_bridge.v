@@ -12,6 +12,7 @@ module papilio_spi_bridge (
     input  wire esp_cs_n,
     output wire esp_miso,
     input  wire esp_mosi,
+    input  wire led_clear_n,
 
     output wire spiflash_clk,
     output wire spiflash_cs_n,
@@ -42,7 +43,7 @@ module papilio_spi_bridge (
     end
 
     // WS2812B uses GRB order. Dim purple is red=8, blue=8.
-    assign led_color = blink_on ? 24'h000808 : 24'h000000;
+    assign led_color = led_clear_n && blink_on ? 24'h000808 : 24'h000000;
 
     ws2812b u_ws2812b (
         .clk(clk_27mhz),

@@ -26,6 +26,7 @@ Experimental branch clock and LED signals:
 | `clk_27mhz` | H11 | 27 MHz clock for the LED blink and WS2812B driver |
 | `rst_n` | C7 | Active-low LED driver reset |
 | `rgb_led` | P9 | WS2812B data output |
+| `led_clear_n` | C11 | ESP32 GPIO9, active-low LED clear |
 
 FPGA bridge to the onboard SPI flash:
 

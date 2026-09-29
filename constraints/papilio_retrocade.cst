@@ -32,3 +32,7 @@ IO_PORT "spiflash_cs_n" PULL_MODE=UP;
 # WS2812B RGB LED data
 IO_LOC "rgb_led" P9;
 IO_PORT "rgb_led" PULL_MODE=NONE;
+
+# ESP32 GPIO9 sideband: active-low LED clear while the bridge is running
+IO_LOC "led_clear_n" C11;
+IO_PORT "led_clear_n" PULL_MODE=UP;
