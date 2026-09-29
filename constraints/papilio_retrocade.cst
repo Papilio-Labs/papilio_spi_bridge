@@ -1,0 +1,23 @@
+# Papilio Retrocade SPI bridge constraints
+# ESP32 GPIO1/2/3/4 -> FPGA A9/L12/J11/F10
+
+IO_LOC "esp_miso" F10;
+IO_LOC "esp_clk" A9;
+IO_LOC "esp_mosi" L12;
+IO_LOC "esp_cs_n" J11;
+
+IO_PORT "esp_miso" PULL_MODE=UP;
+IO_PORT "esp_clk" PULL_MODE=UP;
+IO_PORT "esp_mosi" PULL_MODE=UP;
+IO_PORT "esp_cs_n" PULL_MODE=UP;
+
+# Gowin MSPI pins connected to the onboard FPGA SPI flash
+IO_LOC "spiflash_miso" P10;
+IO_LOC "spiflash_clk" L10;
+IO_LOC "spiflash_mosi" R10;
+IO_LOC "spiflash_cs_n" M9;
+
+IO_PORT "spiflash_miso" PULL_MODE=UP;
+IO_PORT "spiflash_clk" PULL_MODE=UP;
+IO_PORT "spiflash_mosi" PULL_MODE=UP;
+IO_PORT "spiflash_cs_n" PULL_MODE=UP;
