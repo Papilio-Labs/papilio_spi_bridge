@@ -12,7 +12,8 @@ module ws2812b(
     parameter T0L = 22;
     parameter T1H = 19;
     parameter T1L = 16;
-    parameter RES = 1350;
+    // WS2812B-2020 needs >= 280 us low to latch a frame; 8100 cycles = 300 us.
+    parameter RES = 8100;
 
     reg [1:0] state;
     localparam IDLE = 2'b00;
@@ -20,8 +21,7 @@ module ws2812b(
     localparam RESET = 2'b10;
 
     reg [9:0] bit_counter;
-    // RES is 1,350 cycles, so this counter needs 11 bits.
-    reg [10:0] cycle_counter;
+    reg [12:0] cycle_counter;
     reg [23:0] led_data;
 
     always @(posedge clk or negedge rst_n) begin
@@ -29,14 +29,14 @@ module ws2812b(
             state <= IDLE;
             dout <= 1'b0;
             bit_counter <= 10'd0;
-            cycle_counter <= 11'd0;
+            cycle_counter <= 13'd0;
             led_data <= 24'd0;
         end else begin
             case (state)
                 IDLE: begin
                     dout <= 1'b0;
                     bit_counter <= 10'd23;
-                    cycle_counter <= 11'd0;
+                    cycle_counter <= 13'd0;
                     led_data <= led_color_in;
                     state <= SEND;
                 end
@@ -52,7 +52,7 @@ module ws2812b(
 
                     if ((led_data[bit_counter] && cycle_counter == (T1H + T1L - 1)) ||
                         (!led_data[bit_counter] && cycle_counter == (T0H + T0L - 1))) begin
-                        cycle_counter <= 11'd0;
+                        cycle_counter <= 13'd0;
                         if (bit_counter == 0) begin
                             state <= RESET;
                         end else begin
@@ -67,7 +67,7 @@ module ws2812b(
                     dout <= 1'b0;
                     if (cycle_counter == RES - 1) begin
                         state <= IDLE;
-                        cycle_counter <= 11'd0;
+                        cycle_counter <= 13'd0;
                     end else begin
                         cycle_counter <= cycle_counter + 1'b1;
                     end
